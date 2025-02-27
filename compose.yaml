@@ -1,0 +1,21 @@
+services:
+  app:
+    container_name: ia_engineer_path
+    working_dir: /src
+    build:
+      context: .
+      dockerfile: ./deployment/Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./:/src
+    depends_on:
+      - chromadb
+  chromadb:
+    image: chromadb/chroma:latest
+    volumes:
+      - ./chroma_data:/chroma/chroma
+    ports:
+      - "8000:8000"
+
+    
