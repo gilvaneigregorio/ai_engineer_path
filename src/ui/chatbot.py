@@ -1,14 +1,11 @@
 import os
 
 import streamlit as st
-from dotenv import load_dotenv
 
 from ai.agents.conversational import ConversationalAgent
 from ai.constants import ROLE_ASSISTANT, ROLE_SYSTEM, ROLE_USER
-from ai.llms import OpenAILLM
+from ai.models.llm import LargeLanguageModel
 from ai.tools.recipes import RecipeTool
-
-load_dotenv()
 
 
 class ChatbotUI:
@@ -29,7 +26,7 @@ class ChatbotUI:
     def initialize_llm(self):
         api_key = st.session_state.openai_api_key
         if api_key:
-            llm_model = OpenAILLM(api_key=api_key)
+            llm_model = LargeLanguageModel(api_key=api_key)
             self.conversational_agent = ConversationalAgent(
                 llm_model=llm_model, tools=[RecipeTool()]
             )
@@ -92,6 +89,3 @@ class ChatbotUI:
         self.display_header()
         self.display_chat_history()
         self.handle_user_input()
-
-
-chatbot_ui = ChatbotUI()

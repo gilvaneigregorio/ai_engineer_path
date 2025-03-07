@@ -1,14 +1,14 @@
 from typing import List
 
 from ai.constants import ROLE_SYSTEM
-from ai.llms import OpenAILLM
+from ai.models.llm import LargeLanguageModel
 from ai.tools.base import BaseTool
 
 
 class ConversationalAgent:
     def __init__(
         self,
-        llm_model: OpenAILLM,
+        llm_model: LargeLanguageModel,
         tools: List[BaseTool] = [],
     ):
         self.llm_model = llm_model

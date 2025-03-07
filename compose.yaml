@@ -10,12 +10,19 @@ services:
     volumes:
       - ./:/src
     depends_on:
-      - chromadb
-  chromadb:
-    image: chromadb/chroma:latest
-    volumes:
-      - ./chroma_data:/chroma/chroma
-    ports:
-      - "8000:8000"
+      - db
+  db:
+      container_name: ai_engineer_path_db
+      image: pgvector/pgvector:pg13
+      ports:
+        - "5434:5432"  # Change the host port to 5433
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_DB=postgres
+      volumes:
+        - ai_engineer_path_postgres_data:/var/lib/postgresql/data/  # Change the volume name
+volumes:
+  ai_engineer_path_postgres_data:  # Define the new volume
 
     

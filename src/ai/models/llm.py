@@ -5,7 +5,7 @@ from openai import OpenAI
 MODEL_NAME = "gpt-4o-mini"
 
 
-class OpenAILLM:
+class LargeLanguageModel:
     _instance = None
 
     def __new__(cls, api_key: str = None):
