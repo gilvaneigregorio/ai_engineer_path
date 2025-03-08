@@ -1,8 +1,12 @@
 import os
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.exc import StatementError
 from sqlalchemy.orm import Session, declarative_base
+
+load_dotenv()
+
 
 Base = declarative_base()
 engine = create_engine(os.getenv("RELATIONAL_DATABASE_URI"))

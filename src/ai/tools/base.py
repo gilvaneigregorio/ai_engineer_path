@@ -7,5 +7,5 @@ class BaseTool(ABC):
         pass
 
     @abstractmethod
-    def call(self, *args, **kwargs) -> str:
+    def call(self, *args, **kwargs) -> tuple[str, str]:
         pass

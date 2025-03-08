@@ -1,5 +1,7 @@
+.DS_Store
+
 chroma_data/
-resources/
+resources/full_dataset.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -172,3 +174,4 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+.DS_Store

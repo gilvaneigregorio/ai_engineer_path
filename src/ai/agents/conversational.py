@@ -1,7 +1,7 @@
 from typing import List
 
 from ai.constants import ROLE_SYSTEM
-from ai.models.llm import LargeLanguageModel
+from ai.models.llms import LargeLanguageModel
 from ai.tools.base import BaseTool
 
 
@@ -42,16 +42,16 @@ class ConversationalAgent:
             """,
         }
 
-    def call(self, messages: List[dict]) -> str:
+    def call(self, messages: List[dict]) -> tuple[str, str]:
         message = self.llm_model.call(
             messages=messages, tools_definitions=self.tools_definitions
         )
         if message.tool_calls:
             return self._execute_tool(message.tool_calls[0])
 
-        return message.content
+        return message.content, None
 
-    def _execute_tool(self, tool_call: any) -> str:
+    def _execute_tool(self, tool_call: any) -> tuple[str, str]:
         tool = self._get_tool(tool_call.function.name)
         parameters = tool_call.function.arguments
         if isinstance(parameters, str):

@@ -4,7 +4,8 @@ import streamlit as st
 
 from ai.agents.conversational import ConversationalAgent
 from ai.constants import ROLE_ASSISTANT, ROLE_SYSTEM, ROLE_USER
-from ai.models.llm import LargeLanguageModel
+from ai.models.diffusals import DiffusalModel
+from ai.models.llms import LargeLanguageModel
 from ai.tools.recipes import RecipeTool
 
 
@@ -27,8 +28,9 @@ class ChatbotUI:
         api_key = st.session_state.openai_api_key
         if api_key:
             llm_model = LargeLanguageModel(api_key=api_key)
+            diffusal_model = DiffusalModel(api_key=api_key)
             self.conversational_agent = ConversationalAgent(
-                llm_model=llm_model, tools=[RecipeTool()]
+                llm_model=llm_model, tools=[RecipeTool(diffusal_model)]
             )
             if st.session_state.messages == []:
                 st.session_state.messages = [
@@ -77,8 +79,12 @@ class ChatbotUI:
                 st.markdown(prompt)
 
             with st.chat_message(ROLE_ASSISTANT):
-                response = self.conversational_agent.call(st.session_state.messages)
+                response, url = self.conversational_agent.call(
+                    st.session_state.messages
+                )
                 st.markdown(response)
+                if url:
+                    st.image(url, caption="Generated recipe image")
 
             st.session_state.messages.append(
                 {"role": ROLE_ASSISTANT, "content": response}

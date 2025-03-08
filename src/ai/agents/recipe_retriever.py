@@ -1,5 +1,6 @@
 import ast
 
+from ai.models.diffusals import DiffusalModel
 from ai.vectordb.base import DEFAULT_COLLECTION
 from ai.vectordb.pgvector.pgvector import PGVector
 from utils.relational_database import get_session
@@ -11,8 +12,11 @@ class RecipeRetrieverAgent:
         self.vector_db = PGVector(db_session)
 
     def call(
-        self, ingredients_to_use: list[str], ingredients_to_avoid: list[str]
-    ) -> str:
+        self,
+        diffusal_model: DiffusalModel,
+        ingredients_to_use: list[str],
+        ingredients_to_avoid: list[str],
+    ) -> tuple[str, str]:
         # Search for recipes that contain the ingredients to use
         results = self.vector_db.search(
             collection_name=DEFAULT_COLLECTION,
@@ -35,16 +39,14 @@ class RecipeRetrieverAgent:
             return "No recipes found. Try again with different ingredients."
 
         result = results[0].metadata
-        return f"""
-            {result["title"]}
+        recipe = f"""
+            Title:
+            {result["title"]}\n
             Ingredients:
-            {result["ingredients"]}
+            {result["ingredients"]}\n
             Instructions:
-            {result["directions"]}
-
-            Use:
-            {ingredients_to_use}
-            Avoid:
-            {ingredients_to_avoid}
-
+            {result["directions"]}\n
         """
+        prompt = f"Title: {result['title']}"
+        url = diffusal_model.call(prompt)[0]
+        return recipe, url

@@ -19,7 +19,7 @@ APP_NAME = app
 EXEC = docker compose exec $(APP_NAME)
 
 build:
-	docker-compose build
+	docker-compose build --no-cache
 	docker-compose up
 
 run:
